@@ -1,4 +1,6 @@
-  fetch("https://swapi.info/api/starships")
+  const url = "https://swapi.info/api/"
+  
+  fetch(url)
       .then(response => response.json())
       .then(data => {
         const starshipsContainer = document.getElementById("starships");
