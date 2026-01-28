@@ -1,3 +1,4 @@
+/* ---------------- ENDPOINTS ---------------- */
 const endpoints = {
   films: "https://swapi.info/api/films",
   people: "https://swapi.info/api/people",
@@ -9,71 +10,37 @@ const endpoints = {
 
 /* ---------------- FETCH ---------------- */
 function fetchData(url) {
-  return fetch(url)
-    .then(response => response.json());
+  return fetch(url).then(res => res.json());
 }
 
-/* ---------------- LOAD FUNCTIONS ---------------- */
-function loadFilms() {
-  fetchData(endpoints.films)
-    .then(data => {
-      console.log("Films data:", data); // DEBUG
-      showList(data.results, "title");
-    });
-}
-
-function loadPeople() {
-  fetchData(endpoints.people)
-    .then(data => showList(data.results, "name"));
-}
-
-function loadPlanets() {
-  fetchData(endpoints.planets)
-    .then(data => showList(data.results, "name"));
-}
-
-function loadStarships() {
-  fetchData(endpoints.starships)
-    .then(data => showList(data.results, "name"));
-}
-
-function loadVehicles() {
-  fetchData(endpoints.vehicles)
-    .then(data => showList(data.results, "name"));
-}
-
-function loadSpecies() {
-  fetchData(endpoints.species)
-    .then(data => showList(data.results, "name"));
+/* ---------------- GENERIC LOAD FUNCTION ---------------- */
+function loadResource(resource) {
+  fetchData(endpoints[resource]).then(data => {
+    const items = Array.isArray(data) ? data : data.results;
+    const field = resource === "films" ? "title" : "name";
+    showList(items, field);
+  });
 }
 
 /* ---------------- LIST VIEW ---------------- */
 function showList(items, field) {
   const list = document.getElementById("list");
   const details = document.getElementById("details");
-
   list.innerHTML = "";
   details.innerHTML = "";
 
-  // 🔒 SAFETY CHECK (prevents "not iterable")
-  if (!Array.isArray(items)) {
-    console.error("Expected array, got:", items);
-    return;
-  }
+  if (!Array.isArray(items)) return console.error("Expected array, got:", items);
 
-  // for...of loop
   for (const item of items) {
     const { url } = item; // destructuring
-
     const li = document.createElement("li");
     li.textContent = item[field];
     li.addEventListener("click", () => showDetails(url));
-
     list.appendChild(li);
   }
 }
 
-/* ---------------- DETAILS ---------------- */
+/* ---------------- DETAILS VIEW ---------------- */
 function showDetails(url) {
   const details = document.getElementById("details");
   details.innerHTML = "<h2>Details</h2>";
@@ -82,19 +49,12 @@ function showDetails(url) {
     for (const key in data) {
       const value = data[key];
 
-      if (Array.isArray(value)) {
+      if (Array.isArray(value) && value.length > 0) {
         const ul = document.createElement("ul");
-
-        for (const relationUrl of value) {
-          fetchData(relationUrl).then(rel => {
-            const li = document.createElement("li");
-            li.textContent = rel.name || rel.title;
-            ul.appendChild(li);
-          });
-        }
-
+        for (const relUrl of value) fetchRelationName(relUrl, ul);
+        details.appendChild(document.createElement("h3")).textContent = key;
         details.appendChild(ul);
-      } else {
+      } else if (value && typeof value !== "object") {
         const p = document.createElement("p");
         p.textContent = `${key}: ${value}`;
         details.appendChild(p);
@@ -102,3 +62,20 @@ function showDetails(url) {
     }
   });
 }
+
+/* ---------------- FETCH RELATION NAMES ---------------- */
+function fetchRelationName(url, parentUl) {
+  fetchData(url).then(rel => {
+    const li = document.createElement("li");
+    li.textContent = rel.name || rel.title || "Unknown";
+    parentUl.appendChild(li);
+  });
+}
+
+/* ---------------- BUTTON FUNCTIONS ---------------- */
+function loadFilms() { loadResource("films"); }
+function loadPeople() { loadResource("people"); }
+function loadPlanets() { loadResource("planets"); }
+function loadStarships() { loadResource("starships"); }
+function loadVehicles() { loadResource("vehicles"); }
+function loadSpecies() { loadResource("species"); }
