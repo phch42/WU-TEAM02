@@ -1,4 +1,3 @@
-/* ---------------- ENDPOINTS ---------------- */
 const endpoints = {
   films: "https://swapi.info/api/films",
   people: "https://swapi.info/api/people",
@@ -9,73 +8,55 @@ const endpoints = {
 };
 
 /* ---------------- FETCH ---------------- */
-function fetchData(url) {
-  return fetch(url).then(res => res.json());
-}
+const fetchData = url => fetch(url).then(res => res.json());
 
-/* ---------------- GENERIC LOAD FUNCTION ---------------- */
-function loadResource(resource) {
+/* ---------------- LOAD & LIST ---------------- */
+const loadResource = resource => 
   fetchData(endpoints[resource]).then(data => {
-    const items = Array.isArray(data) ? data : data.results;
+    const items = data.results || data;
     const field = resource === "films" ? "title" : "name";
-    showList(items, field);
+    const list = document.getElementById("list");
+    const details = document.getElementById("details");
+    list.innerHTML = "";
+    details.innerHTML = "";
+    items.forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = item[field];
+      li.onclick = () => showDetails(item.url);
+      list.appendChild(li);
+    });
   });
-}
 
-/* ---------------- LIST VIEW ---------------- */
-function showList(items, field) {
-  const list = document.getElementById("list");
-  const details = document.getElementById("details");
-  list.innerHTML = "";
-  details.innerHTML = "";
-
-  if (!Array.isArray(items)) return console.error("Expected array, got:", items);
-
-  for (const item of items) {
-    const { url } = item; // destructuring
-    const li = document.createElement("li");
-    li.textContent = item[field];
-    li.addEventListener("click", () => showDetails(url));
-    list.appendChild(li);
-  }
-}
-
-/* ---------------- DETAILS VIEW ---------------- */
-function showDetails(url) {
+/* ---------------- DETAILS ---------------- */
+const showDetails = url => {
   const details = document.getElementById("details");
   details.innerHTML = "<h2>Details</h2>";
 
   fetchData(url).then(data => {
     for (const key in data) {
       const value = data[key];
-
-      if (Array.isArray(value) && value.length > 0) {
+      if (Array.isArray(value) && value.length) {
         const ul = document.createElement("ul");
-        for (const relUrl of value) fetchRelationName(relUrl, ul);
-        details.appendChild(document.createElement("h3")).textContent = key;
+        value.forEach(relUrl => fetchRelationName(relUrl, ul));
+        const header = document.createElement("h3");
+        header.textContent = key;
+        details.appendChild(header);
         details.appendChild(ul);
       } else if (value && typeof value !== "object") {
-        const p = document.createElement("p");
-        p.textContent = `${key}: ${value}`;
-        details.appendChild(p);
+        details.appendChild(Object.assign(document.createElement("p"), {textContent: `${key}: ${value}`}));
       }
     }
   });
-}
+};
 
 /* ---------------- FETCH RELATION NAMES ---------------- */
-function fetchRelationName(url, parentUl) {
+const fetchRelationName = (url, parentUl) => 
   fetchData(url).then(rel => {
     const li = document.createElement("li");
     li.textContent = rel.name || rel.title || "Unknown";
     parentUl.appendChild(li);
   });
-}
 
-/* ---------------- BUTTON FUNCTIONS ---------------- */
-function loadFilms() { loadResource("films"); }
-function loadPeople() { loadResource("people"); }
-function loadPlanets() { loadResource("planets"); }
-function loadStarships() { loadResource("starships"); }
-function loadVehicles() { loadResource("vehicles"); }
-function loadSpecies() { loadResource("species"); }
+/* ---------------- BUTTONS ---------------- */
+["Films","People","Planets","Starships","Vehicles","Species"]
+  .forEach(type => window["load"+type] = () => loadResource(type.toLowerCase()));
