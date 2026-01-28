@@ -1,81 +1,59 @@
-/* ---------------- ENDPOINTS ---------------- */
-const endpoints = {
-  films: "https://swapi.info/api/films",
-  people: "https://swapi.info/api/people",
-  planets: "https://swapi.info/api/planets",
-  species: "https://swapi.info/api/species",
-  vehicles: "https://swapi.info/api/vehicles",
-  starships: "https://swapi.info/api/starships"
-};
+ const endpoints = {
+      films: "https://swapi.dev/api/films",
+      people: "https://swapi.dev/api/people",
+      planets: "https://swapi.dev/api/planets",
+      species: "https://swapi.dev/api/species",
+      vehicles: "https://swapi.dev/api/vehicles",
+      starships: "https://swapi.dev/api/starships"
+    };
 
-/* ---------------- FETCH ---------------- */
-function fetchData(url) {
-  return fetch(url).then(res => res.json());
-}
-
-/* ---------------- GENERIC LOAD FUNCTION ---------------- */
-function loadResource(resource) {
-  fetchData(endpoints[resource]).then(data => {
-    const items = Array.isArray(data) ? data : data.results;
-    const field = resource === "films" ? "title" : "name";
-    showList(items, field);
-  });
-}
-
-/* ---------------- LIST VIEW ---------------- */
-function showList(items, field) {
-  const list = document.getElementById("list");
-  const details = document.getElementById("details");
-  list.innerHTML = "";
-  details.innerHTML = "";
-
-  if (!Array.isArray(items)) return console.error("Expected array, got:", items);
-
-  for (const item of items) {
-    const { url } = item; // destructuring
-    const li = document.createElement("li");
-    li.textContent = item[field];
-    li.addEventListener("click", () => showDetails(url));
-    list.appendChild(li);
-  }
-}
-
-/* ---------------- DETAILS VIEW ---------------- */
-function showDetails(url) {
-  const details = document.getElementById("details");
-  details.innerHTML = "<h2>Details</h2>";
-
-  fetchData(url).then(data => {
-    for (const key in data) {
-      const value = data[key];
-
-      if (Array.isArray(value) && value.length > 0) {
-        const ul = document.createElement("ul");
-        for (const relUrl of value) fetchRelationName(relUrl, ul);
-        details.appendChild(document.createElement("h3")).textContent = key;
-        details.appendChild(ul);
-      } else if (value && typeof value !== "object") {
-        const p = document.createElement("p");
-        p.textContent = `${key}: ${value}`;
-        details.appendChild(p);
+    async function fetchData(url) {
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(res.status);
+        return await res.json();
+      } catch (err) {
+        console.error("Fetch error:", err);
+        return null;
       }
     }
-  });
-}
 
-/* ---------------- FETCH RELATION NAMES ---------------- */
-function fetchRelationName(url, parentUl) {
-  fetchData(url).then(rel => {
-    const li = document.createElement("li");
-    li.textContent = rel.name || rel.title || "Unknown";
-    parentUl.appendChild(li);
-  });
-}
+    async function load(resource) {
+      const data = await fetchData(endpoints[resource]);
+      if (!data) return;
 
-/* ---------------- BUTTON FUNCTIONS ---------------- */
-function loadFilms() { loadResource("films"); }
-function loadPeople() { loadResource("people"); }
-function loadPlanets() { loadResource("planets"); }
-function loadStarships() { loadResource("starships"); }
-function loadVehicles() { loadResource("vehicles"); }
-function loadSpecies() { loadResource("species"); }
+      const items = data.results || data;
+      const list = document.getElementById("list");
+      const details = document.getElementById("details");
+      list.innerHTML = "";
+      details.innerHTML = "";
+
+      const field = resource === "films" ? "title" : "name";
+
+      items.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item[field] || "Unknown";
+        li.onclick = () => showDetails(resource, item);
+        list.appendChild(li);
+      });
+    }
+
+    function showDetails(resource, item) {
+      const details = document.getElementById("details");
+      details.innerHTML = "<h2>Details</h2>";
+
+      if (resource === "films") {
+        details.innerHTML += `
+          <p><strong>Title:</strong> ${item.title}</p>
+          <p><strong>Episode:</strong> ${item.episode_id}</p>
+          <p><strong>Director:</strong> ${item.director}</p>
+          <p><strong>Release:</strong> ${item.release_date}</p>
+        `;
+      } else {
+        for (const key in item) {
+          if (typeof item[key] !== "object" && item[key] !== null) {
+            details.innerHTML += `<p><strong>${key}:</strong> ${item[key]}</p>`;
+          }
+        }
+      }
+    }
