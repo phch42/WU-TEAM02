@@ -1,26 +1,21 @@
-  const url = "https://swapi.info/api/"
-  
-  fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        const starshipsContainer = document.getElementById("starships");
+const BASE_URL = "https://swapi.info/api/planets";
 
-        data.forEach(starship => {
-          const starshipDiv = document.createElement("div");
+// FETCH API
+fetch(BASE_URL)
+  .then(response => response.json())
+  .then(data => {
 
-          starshipDiv.innerHTML = `
-            <h2>${starship.name}</h2>
-            <p>Model: ${starship.model}</p>
-            <p>Manufacturer: ${starship.manufacturer}</p>
-            <p>Starship Class: ${starship.starship_class}</p>
-            <p>Crew: ${starship.crew}</p>
-            <p>Passengers: ${starship.passengers}</p>
-            <p>Hyperdrive Rating: ${starship.hyperdrive_rating}</p>
-          `;
+    // for...of loop
+    for (const planet of data.results) {
 
-          starshipsContainer.appendChild(starshipDiv);
-        });
-      })
-      .catch(error => {
-        console.error("Error fetching starships:", error);
-      });
+      // destructuring
+      const { name, climate, population } = planet;
+
+      console.log(
+        `Navn: ${name}, Klima: ${climate}, Befolkning: ${population}`
+      );
+    }
+  })
+  .catch(error => {
+    console.error("Failed to fetch API..:", error);
+  });
