@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Star Wars Explorer – Film</title>
   <link rel="stylesheet" href="assets/css/main.css">
-  <script src="assets/js/API.js" defer></script>
+  <script type="module" src="script.js" defer></script>
 </head>
 <body>
 
@@ -29,21 +29,18 @@
     <button onclick="loadVehicles()">Vehicles</button>
     <button onclick="loadSpecies()">Species</button>
 
-    
     <main>
         <section>
             <div id="films"></div>
 
             <ul id="list"></ul>
             <div id="details"></div>
-
     </section>
   </main>
 
   <footer>
     <p>Star Wars Explorer © 2026</p>
   </footer>
-
 
 </body>
 </html>
