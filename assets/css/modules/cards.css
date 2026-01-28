@@ -1,0 +1,17 @@
+.container__cards {
+    margin: 30px 0 60px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+    column-gap: 10px;
+    row-gap: 20px;
+}
+
+.card {
+  aspect-ratio: 3 / 2;
+  border-radius: 12px;
+  border: solid 10px chartreuse; 
+  background-size: cover;
+  display: grid;
+  align-items: end;
+  
+}
