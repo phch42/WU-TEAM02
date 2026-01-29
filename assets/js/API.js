@@ -10,6 +10,20 @@ const filmImages = {
   "Attack of the Clones": "clones.jpg"
 };
 
+const peopleImages = {
+  "Luke Skywalker": "luke.jpg",
+  "Darth Vader": "darth vader.jpg",
+  "Leia Organa": "Leia organa.jpg",
+  "Obi-Wan Kenobi": "obi wan.webp",
+  "Owen Lars": "Owen.webp",
+  "Beru Whitesun Lars": "Beru.webp",
+  "R2-D2": "r2d2.jpeg",
+  "C-3PO": "c-3po.jpeg",
+  "Biggs Darklighter": "biggs.jpg",
+  "R5-D4": "r5-d4.jpg"
+};
+
+
 
 export const getFilms = () => {
   fetch("https://swapi.info/api/films")
@@ -73,18 +87,33 @@ export const getPeople = () => {
         const { name, gender, films } = item;
 
         const liWrapper = document.createElement("li");
-        liWrapper.innerHTML = `<b>${name}</b>`;
 
+   
+        const figure = document.createElement("figure");
+        figure.className = "people-card";
+
+        const img = document.createElement("img");
+  img.src = `./assets/people/${peopleImages[name] || "placeholder.jpg"}`;
+        img.alt = name;
+        img.loading = "lazy";
+
+        const figcaption = document.createElement("figcaption");
+        figcaption.innerText = name;
+
+        figure.append(img, figcaption);
+
+   
         const ulDetails = document.createElement("ul");
 
-        const liDir = document.createElement("li");
-        liDir.innerText = `Køn: ${gender}`;
+        const liGender = document.createElement("li");
+        liGender.innerText = `Køn: ${gender}`;
 
-        const liEpisode = document.createElement("li");
-        liEpisode.innerHTML = `Film: <ul><li>${films.join("</li><li>")}</li></ul>`;
+        const liFilms = document.createElement("li");
+        liFilms.innerHTML = `Film: <ul><li>${films.join("</li><li>")}</li></ul>`;
 
-        ulDetails.append(liDir, liEpisode);
-        liWrapper.append(ulDetails);
+        ulDetails.append(liGender, liFilms);
+
+        liWrapper.append(figure, ulDetails);
         ulWrapper.append(liWrapper);
       }
 
