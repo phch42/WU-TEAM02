@@ -1,9 +1,4 @@
-.films,
-.people,
-.planets,
-.vehicles,
-.species,
-.starships {
+.ul {
   margin: 30px 0 60px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
@@ -14,14 +9,22 @@
 ul {
   list-style: none;  
   aspect-ratio: 3 / 2;
-  border-radius: 12px;
-  border: solid 10px chartreuse;
-  background: var(--blc);
-  background-size: cover;
   display: grid;
   align-items: end;
+  cursor: pointer;
+  border-radius: 12px;
+  border: 10px solid var(--red);
+  transition: all 0.3 ease;
+  box-shadow:
+    0 0 5px var(--red),
+    0 0 10px var(--red),
+    0 0 15px var(--red);
 }
 
-li{
-    color: var(--ylw)
+.card:hover {
+  border-color: var(--red);
+  box-shadow:
+    0 0 20px var(--red),
+    0 0 30px var(--red),
+    0 0 40px var(--red);
 }
