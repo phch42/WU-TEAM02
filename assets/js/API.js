@@ -83,7 +83,7 @@ export const getPeople = () => {
         })
 }
 
-export const getplanets = () => {
+export const getPlanets = () => {
 
     fetch('https://swapi.info/api/planets')
         .then(response => response.json())
@@ -107,7 +107,7 @@ export const getplanets = () => {
 
                 ullist.append(liClimate, liTerrain)
 
-                liWrapper.append(ulDetails)
+                liWrapper.append(ullist)
 
                 ulWrapper.append(liWrapper)
             }
