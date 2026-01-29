@@ -1,9 +1,10 @@
-import { getFilms, getPeople } from "./API.js";
+import { getFilms, getPeople, getPlanets,  } from "./API.js";
 
 const doNavBar = () => {
     const arrNavItems = [
         { text: 'Forside', script: getFilms },
         { text: 'Karakterer', script: getPeople },
+         { text: 'Planeter', script: getPlanets },
     ]
 
     const navList = document.createElement('ul')
