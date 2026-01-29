@@ -195,3 +195,80 @@ export const getVehicles = () => {
             ROOT.append(ulWrapper)
         })
 }
+
+export const getStarships = () => {
+
+    // fetch говорит браузеру:
+    // "сходи по этой ссылке в интернет и принеси данные"
+    fetch('https://swapi.info/api/starships')
+                    // когда браузер получил ответ
+                    // мы превращаем его в JSON (читаемый для JavaScript формат)
+        .then(response => response.json())
+                    // когда JSON уже готов
+                    // data — это объект со всеми данными от API
+        .then(data => {
+                    // создаём HTML элемент <ul>
+                    // это будет список всех кораблей
+           const ulWrapper = document.createElement('ul')
+                    // добавляем класс, чтобы CSS мог его оформить
+            ulWrapper.className = 'starships'
+
+                    // data — это коробка, в которой лежал определенный item
+            for (const item of data) {
+                    // из одного корабля мы достаём нужные данные
+                    // это destructuring — короткий способ взять свойства
+                const { name, model, manufacturer, length, crew, passengers, films } = item
+
+                    // создаём <li> это один корабль в списке
+                const liWrapper = document.createElement('li')
+
+                    // создаём заголовок <h2> в нём будет имя корабля
+                const h2 = document.createElement('h2')
+                    // записываем имя корабля внутрь <h2>
+                h2.innerText = name
+
+
+                    // создаём вложенный список <ul>
+                    // в нём будут детали корабля (model, length и т.д.)
+                const ulInner = document.createElement('ul')
+                
+                    // создаём <li> для модели корабля
+                const liModel = document.createElement('li')
+
+                    // записываем текст, который увидит пользователь ${model} подставляет значение из API
+                liModel.innerText = `Model: ${model}`
+
+                const liManu = document.createElement('li')
+                liManu.innerText = `Manufacturer: ${manufacturer}`
+
+                const liLength = document.createElement("li")
+                liLength.innerText = `Length: ${length}`
+
+                const liCrew = document.createElement("li")
+                liCrew.innerText = `Crew: ${crew}`
+
+                const liPassengers = document.createElement("li")
+                liPassengers.innerText = `Passengers: ${passengers}`
+
+                const liFilms = document.createElement("li")
+                liFilms.innerText = `Films: ${films.length}`;
+
+                   // добавляем строку с моделью внутрь списка деталей
+                ulInner.append(liModel, liManu, liLength, liCrew, liPassengers, liFilms)
+
+                    // кладём заголовок и список деталей внутрь одного корабля
+                liWrapper.append(h2, ulInner) 
+                    // кладём корабль в общий список кораблей
+                ulWrapper.append(liWrapper)
+
+
+            }
+
+                    // очищаем ROOT чтобы старый контент исчез
+            ROOT.innerHTML = ''
+                    // добавляем новый список кораблей на страницу
+            ROOT.append(ulWrapper)
+
+
+        });
+}
