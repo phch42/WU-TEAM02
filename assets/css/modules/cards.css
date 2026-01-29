@@ -1,19 +1,23 @@
-.ul {
+.vehicles{
   margin: 30px 0 60px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
-  column-gap: 10px;
-  row-gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  column-gap: 40px;
+  row-gap: 40px;
 }
 
-ul {
+.vehicle {
+  overflow: hidden;
+  padding: 20px;
+  color: var(--wht); 
+  background: var(--blc);
   list-style: none;  
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 4 / 5;
   display: grid;
   align-items: end;
   cursor: pointer;
   border-radius: 12px;
-  border: 10px solid var(--red);
+  border: 2px solid var(--red);
   transition: all 0.3 ease;
   box-shadow:
     0 0 5px var(--red),
@@ -21,10 +25,29 @@ ul {
     0 0 15px var(--red);
 }
 
-.card:hover {
+.vehicle:hover {
   border-color: var(--red);
   box-shadow:
     0 0 20px var(--red),
     0 0 30px var(--red),
     0 0 40px var(--red);
+}
+
+.vehicleDetail {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.6rem 0;
+    border-top: 1px solid yellow;
+}
+
+.label {
+  text-align: left;
+}
+
+.value {
+    font-weight: 600;
+    text-align: right;
+    
 }
