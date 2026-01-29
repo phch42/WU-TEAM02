@@ -5,6 +5,7 @@ export const getFilms = () => {
     fetch('https://swapi.info/api/films')
         .then(response => response.json())
         .then(data => {
+            console.log(data);
             const ulWrapper = document.createElement('ul')
 
             for (const item of data) {
@@ -30,7 +31,7 @@ export const getFilms = () => {
                 
                 ulWrapper.append(liWrapper)
 
-                console.log(ulWrapper);
+             
 
             }
             ROOT.innerHTML = '';
@@ -76,6 +77,42 @@ export const getPeople = () => {
             ROOT.innerHTML = '';
             ROOT.append(ulWrapper)
 
+        })
+        .catch(error => {
+            console.error(error)
+        })
+}
+
+export const getplanets = () => {
+
+    fetch('https://swapi.info/api/planets')
+        .then(response => response.json())
+        .then(data => {
+            const ulWrapper = document.createElement('ul')
+            ulWrapper.className = 'planets'
+
+            for (const item of data.slice(0,10)) {
+                const { name, climate, terrain } = item
+
+                const liWrapper = document.createElement('li')
+                liWrapper.innerHTML = `<b>${name}</b>`
+
+                const ullist = document.createElement('ul')
+
+                const liClimate = document.createElement('li')
+                liClimate.innerText = `climate: ${climate}`
+
+                const liTerrain = document.createElement('li')
+                liTerrain.innerText = `terrain: ${terrain}`
+
+                ullist.append(liClimate, liTerrain)
+
+                liWrapper.append(ulDetails)
+
+                ulWrapper.append(liWrapper)
+            }
+            ROOT.innerHTML = '';
+            ROOT.append(ulWrapper)
         })
         .catch(error => {
             console.error(error)
