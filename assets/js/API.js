@@ -100,7 +100,7 @@ export const getPlanets = () => {
 
         liWrapper.append(ullist);
 
-        ulWrapper.append(liWrapper);
+        ulWrapper.append(liWrapper); 
       }
       ROOT.innerHTML = "";
       ROOT.append(ulWrapper);
@@ -109,45 +109,43 @@ export const getPlanets = () => {
       console.error(error);
     });
 };
-
 export const getSpecies = () => {
-  fetch("https://swapi.info/api/species")
-    .then((response) => response.json())
-    .then((data) => {
-      const ulWrapper = document.createElement("ul");
-      ulWrapper.className = "species";
+    fetch('https://swapi.info/api/species')
+        .then(response => response.json())
+        .then(data => {
+            const ulWrapper = document.createElement('ul')
+            ulWrapper.className = 'species'
 
-      for (const item of data.slice(0, 10)) {
-        const { name, classification, designation, skin_colors, hair_colors } =
-          item;
+            for (const item of data.slice(0, 10)) {
+                const { name, classification, designation, skin_colors, hair_colors } = item
 
-        const liWrapper = document.createElement("li");
-        liWrapper.innerHTML = `<b>${name}</b>`;
+                const liWrapper = document.createElement('li')
+                liWrapper.innerHTML = `<b>${name}</b>`
 
-        const ullist = document.createElement("ul");
+                const ullist = document.createElement('ul')
 
-        const liClassification = document.createElement("li");
-        liClassification.innerText = `Classification: ${classification}`;
+                const liClassification = document.createElement('li')
+                liClassification.innerText = `Classification: ${classification}`
 
-        const liDesignation = document.createElement("li");
-        liDesignation.innerText = `Designation: ${designation}`;
+                const liDesignation = document.createElement('li')
+                liDesignation.innerText = `Designation: ${designation}`
 
-        const liSkin = document.createElement("li");
-        liSkin.innerText = `Skin colors: ${skin_colors}`;
+                const liSkin = document.createElement('li')
+                liSkin.innerText = `Skin colors: ${skin_colors}`
 
-        const liHair = document.createElement("li");
-        liHair.innerText = `Hair colors: ${hair_colors}`;
+                const liHair = document.createElement('li')
+                liHair.innerText = `Hair colors: ${hair_colors}`
 
-        ullist.append(liClassification, liDesignation, liSkin, liHair);
+                ullist.append(liClassification, liDesignation, liSkin, liHair)
 
-        liWrapper.append(ullist);
-        ulWrapper.append(liWrapper);
-      }
+                liWrapper.append(ullist)
+                ulWrapper.append(liWrapper)
+            }
 
-      ROOT.innerHTML = "";
-      ROOT.append(ulWrapper);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-};
+            ROOT.innerHTML = ''
+            ROOT.append(ulWrapper)
+        })
+        .catch(error => {
+            console.error(error)
+        })
+}
