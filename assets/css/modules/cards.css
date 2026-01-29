@@ -6,7 +6,8 @@
   row-gap: 20px;
 }
 
-.card {
+ul {
+  list-style: none;  
   aspect-ratio: 3 / 2;
   display: grid;
   align-items: end;
