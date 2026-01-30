@@ -190,43 +190,70 @@ export const getSpecies = () => {
 export const getVehicles = () => {
   const ROOT = getRoot();
 
-  fetch("https://swapi.info/api/vehicles")
+  fetch('https://swapi.info/api/vehicles')
     .then(response => response.json())
     .then(data => {
-      const ulWrapper = document.createElement("ul");
-      ulWrapper.className = "vehicles";
+      const ulWrapper = document.createElement('ul');
+      ulWrapper.className = 'vehicles';
 
       for (const item of data) {
         const { name, model, manufacturer, vehicle_class, crew, cargo_capacity, films } = item;
 
-        const liWrapper = document.createElement("li");
-        liWrapper.className = "vehicle";
+        const liWrapper = document.createElement('li');
+        liWrapper.className = 'vehicle';
 
-        const h2 = document.createElement("h2");
-        h2.className = "vehicleName";
+        const h2 = document.createElement('h2');
+        h2.className = 'vehicleName';
         h2.innerText = name;
 
-        const ulInner = document.createElement("ul");
-        ulInner.className = "vehicleDetails";
+        const ulInner = document.createElement('ul');
+        ulInner.className = 'vehicleDetails';
 
-        ulInner.innerHTML = `
-          <li>Model: ${model}</li>
-          <li>Producent: ${manufacturer}</li>
-          <li>Fartøjsklasse: ${vehicle_class}</li>
-          <li>Antal besætning: ${crew}</li>
-          <li>Kapacitet: ${cargo_capacity}</li>
-          <li>Film: ${films.join(", ")}</li>
-        `;
+        const liModel = document.createElement('li');
+        liModel.className = 'vehicleDetail';
+        liModel.innerText = `Model: ${model}`;
+
+        const liManu = document.createElement('li');
+        liManu.className = 'vehicleDetail';
+        liManu.innerText = `Producent: ${manufacturer}`;
+
+        const liVehicles = document.createElement('li');
+        liVehicles.className = 'vehicleDetail';
+
+        const label = document.createElement('span');
+        label.className = 'label';
+        label.innerText = 'Fartøjsklasse:';
+        const value = document.createElement('span');
+        value.className = 'value';
+        value.innerText = `${vehicle_class}`;
+
+        liVehicles.append(label, value);
+
+        const liCrew = document.createElement('li');
+        liCrew.className = 'vehicleDetail';
+        liCrew.innerText = `Antal besætning: ${crew}`;
+
+        const liCargo = document.createElement('li');
+        liCargo.className = 'vehicleDetail';
+        liCargo.innerText = `Kapacitet: ${cargo_capacity}`;
+
+        const liFilms = document.createElement('li');
+        liFilms.className = 'vehicleDetail';
+        liFilms.innerText = `Film: ${films}`;
+
+        ulInner.append(liModel, liManu, label, value, liCrew, liCargo, liFilms);
 
         liWrapper.append(h2, ulInner);
         ulWrapper.append(liWrapper);
       }
 
-      ROOT.innerHTML = "";
+      ROOT.innerHTML = '';
       ROOT.append(ulWrapper);
     })
     .catch(error => console.error(error));
 };
+
+
 
 
 export const getStarships = () => {
