@@ -187,8 +187,8 @@ export const getVehicles = () => {
   fetch("https://swapi.info/api/vehicles")
     .then(response => response.json())
     .then(data => {
-      const ulWrapper = document.createElement("ul");
-      ulWrapper.className = "vehicles";
+      const ulWrapper = document.createElement('ul');
+      ulWrapper.className = 'vehicles';
 
       for (const item of data) {
         const { name, model, manufacturer, vehicle_class, crew, cargo_capacity, films } = item;
