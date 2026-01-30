@@ -10,6 +10,21 @@ const urls = {
 
 /* PEOPLE */
 
+// CACHE
+let filmsCache = null;
+
+// FETCH HELPER
+const fetchData = (url) => fetch(url).then(res => res.json());
+
+// GET ROOT
+const getRoot = () => document.getElementById("root");
+
+// CLEAR ROOT
+export const clearRoot = () => {
+  const ROOT = getRoot();
+  if (ROOT) ROOT.innerHTML = "";
+};
+
 // CACHE FUNCTION
 export const getPeople = () => {
   clearRoot();
