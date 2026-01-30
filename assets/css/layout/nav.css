@@ -1,13 +1,16 @@
 
 nav {
   background: var(--blc);
+  width: 100%;
 }
-ul {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 600px;
-  margin: 0 auto;
+nav > ul {
+    padding: 0 2rem;
+      width: auto;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin: 0 auto;
+      font-size: 1vh;
 }
 #navbar > ul > li {
   list-style: none;
