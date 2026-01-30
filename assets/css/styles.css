@@ -1,4 +1,19 @@
+<<<<<<< HEAD
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+=======
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+@import url('base/reset.css');
+@import url('base/typography.css');
+@import url('base/variables.css');
+
+@import url('layout/header.css');
+@import url('layout/nav.css');
+@import url('layout/main.css');
+@import url('layout/footer.css');
+
+@import url('modules/cards.css');
+>>>>>>> refs/remotes/origin/develop
 
 @import url("base/reset.css");
 @import url("base/typography.css");

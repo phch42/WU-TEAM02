@@ -1,6 +1,3 @@
-const ROOT = document.getElementById("root");
-
-
 const filmImages = {
   "A New Hope": "hope.jpg",
   "The Empire Strikes Back": "empire.webp",
@@ -24,8 +21,12 @@ const peopleImages = {
 };
 
 
+const getRoot = () => document.getElementById("root");
+
 
 export const getFilms = () => {
+  const ROOT = getRoot();
+
   fetch("https://swapi.info/api/films")
     .then((response) => response.json())
     .then((data) => {
@@ -35,19 +36,29 @@ export const getFilms = () => {
         const { title, episode_id, director, release_date } = item;
 
         const liWrapper = document.createElement("li");
-        liWrapper.innerText = title;
 
+     
+        const figure = document.createElement("figure");
+
+        const img = document.createElement("img");
+        img.src = `./assets/images/${filmImages[title] || "placeholder.jpg"}`;
+        img.alt = title;
+
+        const figcaption = document.createElement("figcaption");
+        figcaption.innerText = title;
+
+        figure.append(img, figcaption);
+
+    
         const ulDetails = document.createElement("ul");
-
         const liDir = document.createElement("li");
         liDir.innerText = `Instruktør: ${director}`;
-
         const liEpisode = document.createElement("li");
         liEpisode.innerText = `Episode: ${episode_id}`;
-
         const liRelease = document.createElement("li");
         liRelease.innerText = `Udgivelsesår: ${new Date(release_date).getFullYear()}`;
 
+        ulDetails.append(liDir, liEpisode, liRelease);
         ulDetails.append(liDir, liEpisode, liRelease);
 
         liWrapper.append(figure, ulDetails);
@@ -57,9 +68,7 @@ export const getFilms = () => {
       ROOT.innerHTML = "";
       ROOT.append(ulWrapper);
     })
-    .catch((error) => {
-      console.error(error);
-    });
+    .catch((error) => console.error(error));
 };
 
 
@@ -72,6 +81,8 @@ export const getPeople = () => {
 
       for (const item of data.slice(0, 10)) {
         const { name, gender, films } = item;
+      for (const item of data.slice(0, 10)) {
+        const { name, gender, films } = item;
 
         const liWrapper = document.createElement("li");
 
@@ -80,6 +91,7 @@ export const getPeople = () => {
         figure.className = "people-card";
 
         const img = document.createElement("img");
+        img.src = `./assets/people/${peopleImages[name] || "placeholder.jpg"}`;
         img.src = `./assets/people/${peopleImages[name] || "placeholder.jpg"}`;
         img.alt = name;
         img.loading = "lazy";
@@ -107,11 +119,8 @@ export const getPeople = () => {
       ROOT.innerHTML = "";
       ROOT.append(ulWrapper);
     })
-    .catch((error) => {
-      console.error(error);
-    });
+    .catch((error) => console.error(error));
 };
-
 
 export const getPlanets = () => {
   fetch("https://swapi.info/api/planets")
@@ -125,14 +134,14 @@ export const getPlanets = () => {
 
         const liWrapper = document.createElement("li");
         liWrapper.innerHTML = `<b>${name}</b>`;
+        const liWrapper = document.createElement("li");
+        liWrapper.innerHTML = `<b>${name}</b>`;
 
         const ullist = document.createElement("ul");
-
         const liClimate = document.createElement("li");
-        liClimate.innerText = `climate: ${climate}`;
-
+        liClimate.innerText = `Climate: ${climate}`;
         const liTerrain = document.createElement("li");
-        liTerrain.innerText = `terrain: ${terrain}`;
+        liTerrain.innerText = `Terrain: ${terrain}`;
 
         ullist.append(liClimate, liTerrain);
         liWrapper.append(ullist);
@@ -142,13 +151,14 @@ export const getPlanets = () => {
       ROOT.innerHTML = "";
       ROOT.append(ulWrapper);
     })
-    .catch((error) => {
-      console.error(error);
-    });
+    .catch(error => console.error(error));
 };
 
 
+
 export const getSpecies = () => {
+  const ROOT = getRoot();
+
   fetch("https://swapi.info/api/species")
     .then(response => response.json())
     .then(data => {
@@ -162,7 +172,6 @@ export const getSpecies = () => {
         liWrapper.innerHTML = `<b>${name}</b>`;
 
         const ullist = document.createElement("ul");
-
         ullist.innerHTML = `
           <li>Classification: ${classification}</li>
           <li>Designation: ${designation}</li>
@@ -177,9 +186,7 @@ export const getSpecies = () => {
       ROOT.innerHTML = "";
       ROOT.append(ulWrapper);
     })
-    .catch(error => {
-      console.error(error);
-    });
+    .catch(error => console.error(error));
 };
 
 
@@ -189,8 +196,8 @@ export const getVehicles = () => {
   fetch('https://swapi.info/api/vehicles')
     .then(response => response.json())
     .then(data => {
-      const ulWrapper = document.createElement('ul');
-      ulWrapper.className = 'vehicles';
+      const ulWrapper = document.createElement("ul");
+      ulWrapper.className = "vehicles";
 
       for (const item of data) {
         const { name, model, manufacturer, vehicle_class, crew, cargo_capacity, films } = item;
