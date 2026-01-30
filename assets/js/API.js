@@ -1,3 +1,6 @@
+const ROOT = document.getElementById("root");
+
+
 const filmImages = {
   "A New Hope": "hope.jpg",
   "The Empire Strikes Back": "empire.webp",
@@ -21,44 +24,31 @@ const peopleImages = {
 };
 
 
-const getRoot = () => document.getElementById("root");
-
 
 export const getFilms = () => {
-  const ROOT = getRoot();
-
   fetch("https://swapi.info/api/films")
     .then((response) => response.json())
     .then((data) => {
       const ulWrapper = document.createElement("ul");
 
-      for (const item of data) {
-        const { title, episode_id, director, release_date } = item;
+            for (const item of data) {
+                const { title, episode_id, director, release_date } = item;
 
-        const liWrapper = document.createElement("li");
+                const liWrapper = document.createElement("li");
+                liWrapper.innerText = title;
 
-     
-        const figure = document.createElement("figure");
+                const ulDetails = document.createElement("ul");
 
-        const img = document.createElement("img");
-        img.src = `./assets/images/${filmImages[title] || "placeholder.jpg"}`;
-        img.alt = title;
+                const liDir = document.createElement("li");
+                liDir.innerText = `Instruktør: ${director}`;
 
-        const figcaption = document.createElement("figcaption");
-        figcaption.innerText = title;
+                const liEpisode = document.createElement("li");
+                liEpisode.innerText = `Episode: ${episode_id}`;
 
-        figure.append(img, figcaption);
+                const liRelease = document.createElement("li");
+                liRelease.innerText = `Udgivelsesår: ${new Date(release_date).getFullYear()}`;
 
-    
-        const ulDetails = document.createElement("ul");
-        const liDir = document.createElement("li");
-        liDir.innerText = `Instruktør: ${director}`;
-        const liEpisode = document.createElement("li");
-        liEpisode.innerText = `Episode: ${episode_id}`;
-        const liRelease = document.createElement("li");
-        liRelease.innerText = `Udgivelsesår: ${new Date(release_date).getFullYear()}`;
-
-        ulDetails.append(liDir, liEpisode, liRelease);
+                ulDetails.append(liDir, liEpisode, liRelease);
 
         liWrapper.append(figure, ulDetails);
         ulWrapper.append(liWrapper);
@@ -67,29 +57,30 @@ export const getFilms = () => {
       ROOT.innerHTML = "";
       ROOT.append(ulWrapper);
     })
-    .catch((error) => console.error(error));
+    .catch((error) => {
+      console.error(error);
+    });
 };
 
 
 export const getPeople = () => {
-  const ROOT = getRoot();
+    fetch("https://swapi.info/api/people")
+        .then((response) => response.json())
+        .then((data) => {
+            const ulWrapper = document.createElement("ul");
+            ulWrapper.className = "people";
 
-  fetch("https://swapi.info/api/people")
-    .then((response) => response.json())
-    .then((data) => {
-      const ulWrapper = document.createElement("ul");
-      ulWrapper.className = "people";
-
-      for (const item of data.slice(0, 10)) {
-        const { name, gender, films } = item;
+            for (const item of data.slice(0, 10)) {
+                const { name, gender, films } = item;
 
         const liWrapper = document.createElement("li");
 
+   
         const figure = document.createElement("figure");
         figure.className = "people-card";
 
         const img = document.createElement("img");
-        img.src = `./assets/people/${peopleImages[name] || "placeholder.jpg"}`;
+  img.src = `./assets/people/${peopleImages[name] || "placeholder.jpg"}`;
         img.alt = name;
         img.loading = "lazy";
 
@@ -98,6 +89,7 @@ export const getPeople = () => {
 
         figure.append(img, figcaption);
 
+   
         const ulDetails = document.createElement("ul");
 
         const liGender = document.createElement("li");
@@ -115,30 +107,32 @@ export const getPeople = () => {
       ROOT.innerHTML = "";
       ROOT.append(ulWrapper);
     })
-    .catch((error) => console.error(error));
+    .catch((error) => {
+      console.error(error);
+    });
 };
 
+
 export const getPlanets = () => {
-  const ROOT = getRoot();
+    fetch("https://swapi.info/api/planets")
+        .then((response) => response.json())
+        .then((data) => {
+            const ulWrapper = document.createElement("ul");
+            ulWrapper.className = "planets";
 
-  fetch("https://swapi.info/api/planets")
-    .then(response => response.json())
-    .then(data => {
-      const ulWrapper = document.createElement("ul");
-      ulWrapper.className = "planets";
-  
-      for (const item of data.slice(0, 10)) {
-        console.log(item)
-        const { name, climate, terrain } = item;
+            for (const item of data.slice(0, 10)) {
+                const { name, climate, terrain } = item;
 
-        const liWrapper = document.createElement("li");
-        liWrapper.innerHTML = `<b>${name}</b>`;
+                const liWrapper = document.createElement("li");
+                liWrapper.innerHTML = `<b>${name}</b>`;
 
-        const ullist = document.createElement("ul");
-        const liClimate = document.createElement("li");
-        liClimate.innerText = `Climate: ${climate}`;
-        const liTerrain = document.createElement("li");
-        liTerrain.innerText = `Terrain: ${terrain}`;
+                const ullist = document.createElement("ul");
+
+                const liClimate = document.createElement("li");
+                liClimate.innerText = `climate: ${climate}`;
+
+                const liTerrain = document.createElement("li");
+                liTerrain.innerText = `terrain: ${terrain}`;
 
         ullist.append(liClimate, liTerrain);
         liWrapper.append(ullist);
@@ -148,14 +142,13 @@ export const getPlanets = () => {
       ROOT.innerHTML = "";
       ROOT.append(ulWrapper);
     })
-    .catch(error => console.error(error));
+    .catch((error) => {
+      console.error(error);
+    });
 };
 
 
-
 export const getSpecies = () => {
-  const ROOT = getRoot();
-
   fetch("https://swapi.info/api/species")
     .then(response => response.json())
     .then(data => {
@@ -169,6 +162,7 @@ export const getSpecies = () => {
         liWrapper.innerHTML = `<b>${name}</b>`;
 
         const ullist = document.createElement("ul");
+
         ullist.innerHTML = `
           <li>Classification: ${classification}</li>
           <li>Designation: ${designation}</li>
@@ -183,13 +177,13 @@ export const getSpecies = () => {
       ROOT.innerHTML = "";
       ROOT.append(ulWrapper);
     })
-    .catch(error => console.error(error));
+    .catch(error => {
+      console.error(error);
+    });
 };
 
 
 export const getVehicles = () => {
-  const ROOT = getRoot();
-
   fetch("https://swapi.info/api/vehicles")
     .then(response => response.json())
     .then(data => {
@@ -200,62 +194,71 @@ export const getVehicles = () => {
         const { name, model, manufacturer, vehicle_class, crew, cargo_capacity, films } = item;
 
         const liWrapper = document.createElement("li");
-        liWrapper.className = "vehicle";
-
         const h2 = document.createElement("h2");
-        h2.className = "vehicleName";
         h2.innerText = name;
 
         const ulInner = document.createElement("ul");
-        ulInner.className = "vehicleDetails";
 
-        ulInner.innerHTML = `
-          <li>Model: ${model}</li>
-          <li>Producent: ${manufacturer}</li>
-          <li>Fartøjsklasse: ${vehicle_class}</li>
-          <li>Antal besætning: ${crew}</li>
-          <li>Kapacitet: ${cargo_capacity}</li>
-          <li>Film: ${films.join(", ")}</li>
-        `;
+        const liModel = document.createElement("li");
+        liModel.innerText = `Model: ${model}`;
 
-        liWrapper.append(h2, ulInner);
-        ulWrapper.append(liWrapper);
-      }
+    fetch('https://swapi.info/api/vehicles')
+        .then(response => response.json())
+        .then(data => {
+            const ulWrapper = document.createElement('ul')
+            ulWrapper.className = 'vehicles'
 
-      ROOT.innerHTML = "";
-      ROOT.append(ulWrapper);
-    })
-    .catch(error => console.error(error));
-};
+            for (const item of data) {
+                const { name, model, manufacturer, vehicle_class, crew, cargo_capacity, films } = item
 
+                const liWrapper = document.createElement('li')
+                liWrapper.className = 'vehicle'
 
-export const getStarships = () => {
-  const ROOT = getRoot();
+                const h2 = document.createElement('h2')
+                h2.className = 'vehicleName'
+                h2.innerText = name
 
-  fetch("https://swapi.info/api/starships")
-    .then(response => response.json())
-    .then(data => {
-      const ulWrapper = document.createElement("ul");
-      ulWrapper.className = "starships";
+                const ulInner = document.createElement('ul')
+                ulInner.className = 'vehicleDetails'
 
-      for (const item of data) {
-        const { name, model, manufacturer, crew } = item;
+                const liModel = document.createElement('li')
+                liModel.className = 'vehicleDetail'
+                liModel.innerText = `Model: ${model}`
 
-        const li = document.createElement("li");
-        li.innerHTML = `
-          <b>${name}</b>
-          <ul>
-            <li>Model: ${model}</li>
-            <li>Manufacturer: ${manufacturer}</li>
-            <li>Crew: ${crew}</li>
-          </ul>
-        `;
+                const liManu = document.createElement('li')
+                liManu.className = 'vehicleDetail'
+                liManu.innerText = `Producent: ${manufacturer}`
 
-        ulWrapper.append(li);
-      }
+                const liVehicles = document.createElement('li')
+                liVehicles.className = 'vehicleDetail'
 
-      ROOT.innerHTML = "";
-      ROOT.append(ulWrapper);
-    })
-    .catch(error => console.error(error));
-};
+                const label = document.createElement('span')
+                label.className = 'label'
+                label.innerText = 'Fartøjsklasse:'
+                const value = document.createElement('span')
+                value.className = 'value'
+                value.innerText = `${vehicle_class}`
+               
+                liVehicles.append(label, value)
+
+                const liCrew = document.createElement('li')
+                liCrew.className = 'vehicleDetail'
+                liCrew.innerText = `Antal besætning: ${crew}`
+
+                const liCargo = document.createElement('li')
+                liCargo.className = 'vehicleDetail'
+                liCargo.innerText = `Kapacitet: ${cargo_capacity}`
+
+                const liFilms = document.createElement('li')
+                liFilms.className = 'vehicleDetail'
+                liFilms.innerText = `Film: ${films}`
+
+                ulInner.append(liModel, liManu, label, value, liCrew, liCargo, liFilms)
+
+                liWrapper.append(h2, ulInner)
+                ulWrapper.append(liWrapper)
+            }
+            ROOT.innerHTML = ''
+            ROOT.append(ulWrapper)
+        })
+}

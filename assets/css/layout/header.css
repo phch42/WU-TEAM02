@@ -1,5 +1,23 @@
 header {
-    padding: 3rem 6rem;
+    padding: 80px;
     background: var(--blc);
     color: var(--ylw);
+}
+nav{
+  background: var(--blc);
+  
+
+}
+ul{ 
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 800px;
+    margin: 0 auto;
+    
+    
+}
+#navbar > ul > li{
+  list-style: none;
+  color: var(--wht);
 }
