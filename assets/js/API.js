@@ -31,24 +31,24 @@ export const getFilms = () => {
     .then((data) => {
       const ulWrapper = document.createElement("ul");
 
-            for (const item of data) {
-                const { title, episode_id, director, release_date } = item;
+      for (const item of data) {
+        const { title, episode_id, director, release_date } = item;
 
-                const liWrapper = document.createElement("li");
-                liWrapper.innerText = title;
+        const liWrapper = document.createElement("li");
+        liWrapper.innerText = title;
 
-                const ulDetails = document.createElement("ul");
+        const ulDetails = document.createElement("ul");
 
-                const liDir = document.createElement("li");
-                liDir.innerText = `Instruktør: ${director}`;
+        const liDir = document.createElement("li");
+        liDir.innerText = `Instruktør: ${director}`;
 
-                const liEpisode = document.createElement("li");
-                liEpisode.innerText = `Episode: ${episode_id}`;
+        const liEpisode = document.createElement("li");
+        liEpisode.innerText = `Episode: ${episode_id}`;
 
-                const liRelease = document.createElement("li");
-                liRelease.innerText = `Udgivelsesår: ${new Date(release_date).getFullYear()}`;
+        const liRelease = document.createElement("li");
+        liRelease.innerText = `Udgivelsesår: ${new Date(release_date).getFullYear()}`;
 
-                ulDetails.append(liDir, liEpisode, liRelease);
+        ulDetails.append(liDir, liEpisode, liRelease);
 
         liWrapper.append(figure, ulDetails);
         ulWrapper.append(liWrapper);
@@ -64,23 +64,23 @@ export const getFilms = () => {
 
 
 export const getPeople = () => {
-    fetch("https://swapi.info/api/people")
-        .then((response) => response.json())
-        .then((data) => {
-            const ulWrapper = document.createElement("ul");
-            ulWrapper.className = "people";
+  fetch("https://swapi.info/api/people")
+    .then((response) => response.json())
+    .then((data) => {
+      const ulWrapper = document.createElement("ul");
+      ulWrapper.className = "people";
 
-            for (const item of data.slice(0, 10)) {
-                const { name, gender, films } = item;
+      for (const item of data.slice(0, 10)) {
+        const { name, gender, films } = item;
 
         const liWrapper = document.createElement("li");
 
-   
+
         const figure = document.createElement("figure");
         figure.className = "people-card";
 
         const img = document.createElement("img");
-  img.src = `./assets/people/${peopleImages[name] || "placeholder.jpg"}`;
+        img.src = `./assets/people/${peopleImages[name] || "placeholder.jpg"}`;
         img.alt = name;
         img.loading = "lazy";
 
@@ -89,7 +89,7 @@ export const getPeople = () => {
 
         figure.append(img, figcaption);
 
-   
+
         const ulDetails = document.createElement("ul");
 
         const liGender = document.createElement("li");
@@ -114,25 +114,25 @@ export const getPeople = () => {
 
 
 export const getPlanets = () => {
-    fetch("https://swapi.info/api/planets")
-        .then((response) => response.json())
-        .then((data) => {
-            const ulWrapper = document.createElement("ul");
-            ulWrapper.className = "planets";
+  fetch("https://swapi.info/api/planets")
+    .then((response) => response.json())
+    .then((data) => {
+      const ulWrapper = document.createElement("ul");
+      ulWrapper.className = "planets";
 
-            for (const item of data.slice(0, 10)) {
-                const { name, climate, terrain } = item;
+      for (const item of data.slice(0, 10)) {
+        const { name, climate, terrain } = item;
 
-                const liWrapper = document.createElement("li");
-                liWrapper.innerHTML = `<b>${name}</b>`;
+        const liWrapper = document.createElement("li");
+        liWrapper.innerHTML = `<b>${name}</b>`;
 
-                const ullist = document.createElement("ul");
+        const ullist = document.createElement("ul");
 
-                const liClimate = document.createElement("li");
-                liClimate.innerText = `climate: ${climate}`;
+        const liClimate = document.createElement("li");
+        liClimate.innerText = `climate: ${climate}`;
 
-                const liTerrain = document.createElement("li");
-                liTerrain.innerText = `terrain: ${terrain}`;
+        const liTerrain = document.createElement("li");
+        liTerrain.innerText = `terrain: ${terrain}`;
 
         ullist.append(liClimate, liTerrain);
         liWrapper.append(ullist);
@@ -184,7 +184,9 @@ export const getSpecies = () => {
 
 
 export const getVehicles = () => {
-  fetch("https://swapi.info/api/vehicles")
+  const ROOT = getRoot();
+
+  fetch('https://swapi.info/api/vehicles')
     .then(response => response.json())
     .then(data => {
       const ulWrapper = document.createElement('ul');
@@ -193,72 +195,135 @@ export const getVehicles = () => {
       for (const item of data) {
         const { name, model, manufacturer, vehicle_class, crew, cargo_capacity, films } = item;
 
-        const liWrapper = document.createElement("li");
-        const h2 = document.createElement("h2");
+        const liWrapper = document.createElement('li');
+        liWrapper.className = 'vehicle';
+
+        const h2 = document.createElement('h2');
+        h2.className = 'vehicleName';
         h2.innerText = name;
 
-        const ulInner = document.createElement("ul");
+        const ulInner = document.createElement('ul');
+        ulInner.className = 'vehicleDetails';
 
-        const liModel = document.createElement("li");
+        const liModel = document.createElement('li');
+        liModel.className = 'vehicleDetail';
         liModel.innerText = `Model: ${model}`;
 
-    fetch('https://swapi.info/api/vehicles')
+        const liManu = document.createElement('li');
+        liManu.className = 'vehicleDetail';
+        liManu.innerText = `Producent: ${manufacturer}`;
+
+        const liVehicles = document.createElement('li');
+        liVehicles.className = 'vehicleDetail';
+
+        const label = document.createElement('span');
+        label.className = 'label';
+        label.innerText = 'Fartøjsklasse:';
+        const value = document.createElement('span');
+        value.className = 'value';
+        value.innerText = `${vehicle_class}`;
+
+        liVehicles.append(label, value);
+
+        const liCrew = document.createElement('li');
+        liCrew.className = 'vehicleDetail';
+        liCrew.innerText = `Antal besætning: ${crew}`;
+
+        const liCargo = document.createElement('li');
+        liCargo.className = 'vehicleDetail';
+        liCargo.innerText = `Kapacitet: ${cargo_capacity}`;
+
+        const liFilms = document.createElement('li');
+        liFilms.className = 'vehicleDetail';
+        liFilms.innerText = `Film: ${films}`;
+
+        ulInner.append(liModel, liManu, label, value, liCrew, liCargo, liFilms);
+
+        liWrapper.append(h2, ulInner);
+        ulWrapper.append(liWrapper);
+      }
+
+      ROOT.innerHTML = '';
+      ROOT.append(ulWrapper);
+    })
+    .catch(error => console.error(error));
+};
+
+
+
+// мы создаём функцию, которую можно использовать в других файлах
+// эта функция будет загружать и показывать starships
+export const getStarships = () => {
+
+    // fetch говорит браузеру:
+    // "сходи по этой ссылке в интернет и принеси данные"
+    fetch('https://swapi.info/api/starships')
+                    // когда браузер получил ответ
+                    // мы превращаем его в JSON (читаемый для JavaScript формат)
         .then(response => response.json())
+                    // когда JSON уже готов
+                    // data — это объект со всеми данными от API
         .then(data => {
-            const ulWrapper = document.createElement('ul')
-            ulWrapper.className = 'vehicles'
+                    // создаём HTML элемент <ul>
+                    // это будет список всех кораблей
+           const ulWrapper = document.createElement('ul')
+                    // добавляем класс, чтобы CSS мог его оформить
+            ulWrapper.className = 'starships'
 
+                    // data — это коробка, в которой лежал определенный item
             for (const item of data) {
-                const { name, model, manufacturer, vehicle_class, crew, cargo_capacity, films } = item
-
+                    // из одного корабля мы достаём нужные данные
+                    // это destructuring — короткий способ взять свойства
+                const { name, model, manufacturer, length, crew, passengers, films } = item
+// создаём <li> это один корабль в списке
                 const liWrapper = document.createElement('li')
-                liWrapper.className = 'vehicle'
 
+                    // создаём заголовок <h2> в нём будет имя корабля
                 const h2 = document.createElement('h2')
-                h2.className = 'vehicleName'
+                    // записываем имя корабля внутрь <h2>
                 h2.innerText = name
 
-                const ulInner = document.createElement('ul')
-                ulInner.className = 'vehicleDetails'
 
+                    // создаём вложенный список <ul>
+                    // в нём будут детали корабля (model, length и т.д.)
+                const ulInner = document.createElement('ul')
+
+                    // создаём <li> для модели корабля
                 const liModel = document.createElement('li')
-                liModel.className = 'vehicleDetail'
-                liModel.innerText = `Model: ${model}`
+
+                    // записываем текст, который увидит пользователь ${model} подставляет значение из API
+                liModel.innerText = 'Model: ${model}'
 
                 const liManu = document.createElement('li')
-                liManu.className = 'vehicleDetail'
-                liManu.innerText = `Producent: ${manufacturer}`
+                liManu.innerText = 'Manufacturer: ${manufacturer}'
 
-                const liVehicles = document.createElement('li')
-                liVehicles.className = 'vehicleDetail'
+                const liLength = document.createElement("li")
+                liLength.innerText = 'Length: ${length}'
 
-                const label = document.createElement('span')
-                label.className = 'label'
-                label.innerText = 'Fartøjsklasse:'
-                const value = document.createElement('span')
-                value.className = 'value'
-                value.innerText = `${vehicle_class}`
-               
-                liVehicles.append(label, value)
+                const liCrew = document.createElement("li")
+                liCrew.innerText = 'Crew: ${crew}'
 
-                const liCrew = document.createElement('li')
-                liCrew.className = 'vehicleDetail'
-                liCrew.innerText = `Antal besætning: ${crew}`
+                const liPassengers = document.createElement("li")
+                liPassengers.innerText = 'Passengers: ${passengers}'
+const liFilms = document.createElement("li")
+                liFilms.innerText = 'Films: ${films.length};'
 
-                const liCargo = document.createElement('li')
-                liCargo.className = 'vehicleDetail'
-                liCargo.innerText = `Kapacitet: ${cargo_capacity}`
+                   // добавляем строку с моделью внутрь списка деталей
+                ulInner.append(liModel, liManu, liLength, liCrew, liPassengers, liFilms)
 
-                const liFilms = document.createElement('li')
-                liFilms.className = 'vehicleDetail'
-                liFilms.innerText = `Film: ${films}`
-
-                ulInner.append(liModel, liManu, label, value, liCrew, liCargo, liFilms)
-
-                liWrapper.append(h2, ulInner)
+                    // кладём заголовок и список деталей внутрь одного корабля
+                liWrapper.append(h2, ulInner) 
+                    // кладём корабль в общий список кораблей
                 ulWrapper.append(liWrapper)
+
+
             }
+
+                    // очищаем ROOT чтобы старый контент исчез
             ROOT.innerHTML = ''
+                    // добавляем новый список кораблей на страницу
             ROOT.append(ulWrapper)
-        })
+
+
+        });
 }
