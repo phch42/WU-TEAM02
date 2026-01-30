@@ -1,288 +1,263 @@
-const filmImages = {
-  "A New Hope": "hope.jpg",
-  "The Empire Strikes Back": "empire.webp",
-  "Return of the Jedi": "return of the jedi.jpeg",
-  "Revenge of the Sith": "revenge.jpeg",
-  "The Phantom Menace": "phantom.jpg",
-  "Attack of the Clones": "clones.jpg"
+// URLS (OBJ)
+const urls = {
+  films: 'https://swapi.info/api/films',
+  people: 'https://swapi.info/api/people',
+  planets: 'https://swapi.info/api/planets',
+  species: 'https://swapi.info/api/species',
+  vehicles: 'https://swapi.info/api/vehicles',
+  starships: 'https://swapi.info/api/starships'
 };
 
-const peopleImages = {
-  "Luke Skywalker": "luke.jpg",
-  "Darth Vader": "darth vader.jpg",
-  "Leia Organa": "Leia organa.jpg",
-  "Obi-Wan Kenobi": "obi wan.webp",
-  "Owen Lars": "Owen.webp",
-  "Beru Whitesun Lars": "Beru.webp",
-  "R2-D2": "r2d2.jpeg",
-  "C-3PO": "c-3po.jpeg",
-  "Biggs Darklighter": "biggs.jpg",
-  "R5-D4": "r5-d4.jpg"
+// ROOT container div
+const ROOT = document.getElementById('root');
+
+const clearRoot = () => {
+  ROOT.innerHTML = '';
 };
 
+// Response check if url is valid
+const fetchData = (url) => {
+  return fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => data.results ?? data);
+};
 
-const getRoot = () => document.getElementById("root");
-
+/* FILMS */
+let filmsCache = null; // set to null
 
 export const getFilms = () => {
-  const ROOT = getRoot();
-
-  fetch("https://swapi.info/api/films")
-    .then((response) => response.json())
-    .then((data) => {
-      const ulWrapper = document.createElement("ul");
-
-      for (const item of data) {
-        const { title, episode_id, director, release_date } = item;
-
-        const liWrapper = document.createElement("li");
-
-     
-        const figure = document.createElement("figure");
-
-        const img = document.createElement("img");
-        img.src = `./assets/images/${filmImages[title] || "placeholder.jpg"}`;
-        img.alt = title;
-
-        const figcaption = document.createElement("figcaption");
-        figcaption.innerText = title;
-
-        figure.append(img, figcaption);
-
-    
-        const ulDetails = document.createElement("ul");
-        const liDir = document.createElement("li");
-        liDir.innerText = `Instruktør: ${director}`;
-        const liEpisode = document.createElement("li");
-        liEpisode.innerText = `Episode: ${episode_id}`;
-        const liRelease = document.createElement("li");
-        liRelease.innerText = `Udgivelsesår: ${new Date(release_date).getFullYear()}`;
-
-        ulDetails.append(liDir, liEpisode, liRelease);
-
-        liWrapper.append(figure, ulDetails);
-        ulWrapper.append(liWrapper);
-      }
-
-      ROOT.innerHTML = "";
-      ROOT.append(ulWrapper);
-    })
-    .catch((error) => console.error(error));
-};
-
-
-export const getPeople = () => {
-  const ROOT = getRoot();
-
-  fetch("https://swapi.info/api/people")
-    .then((response) => response.json())
-    .then((data) => {
-      const ulWrapper = document.createElement("ul");
-      ulWrapper.className = "people";
-
-      for (const item of data.slice(0, 10)) {
-        const { name, gender, films } = item;
-
-        const liWrapper = document.createElement("li");
-
-        const figure = document.createElement("figure");
-        figure.className = "people-card";
-
-        const img = document.createElement("img");
-        img.src = `./assets/people/${peopleImages[name] || "placeholder.jpg"}`;
-        img.alt = name;
-        img.loading = "lazy";
-
-        const figcaption = document.createElement("figcaption");
-        figcaption.innerText = name;
-
-        figure.append(img, figcaption);
-
-        const ulDetails = document.createElement("ul");
-
-        const liGender = document.createElement("li");
-        liGender.innerText = `Køn: ${gender}`;
-
-        const liFilms = document.createElement("li");
-        liFilms.innerHTML = `Film: <ul><li>${films.join("</li><li>")}</li></ul>`;
-
-        ulDetails.append(liGender, liFilms);
-
-        liWrapper.append(figure, ulDetails);
-        ulWrapper.append(liWrapper);
-      }
-
-      ROOT.innerHTML = "";
-      ROOT.append(ulWrapper);
-    })
-    .catch((error) => console.error(error));
-};
-
-export const getPlanets = () => {
-  const ROOT = getRoot();
-
-  fetch("https://swapi.info/api/planets")
-    .then(response => response.json())
+  clearRoot();
+  ROOT.textContent = 'Loading films...';
+// FETCH FILMS DATA
+  fetchData(urls.films)
     .then(data => {
-      const ulWrapper = document.createElement("ul");
-      ulWrapper.className = "planets";
-  
-      for (const item of data.slice(0, 10)) {
-        console.log(item)
-        const { name, climate, terrain } = item;
+      filmsCache = new Map(data.map(f => [f.url, f.title])); // cache for people
+      const ulWrapper = document.createElement('ul');
 
-        const liWrapper = document.createElement("li");
-        liWrapper.innerHTML = `<b>${name}</b>`;
+      data.forEach(({ title, episode_id, director, release_date }) => {
+        const li = document.createElement('li');
+        li.textContent = title;
 
-        const ullist = document.createElement("ul");
-        const liClimate = document.createElement("li");
-        liClimate.innerText = `Climate: ${climate}`;
-        const liTerrain = document.createElement("li");
-        liTerrain.innerText = `Terrain: ${terrain}`;
-
-        ullist.append(liClimate, liTerrain);
-        liWrapper.append(ullist);
-        ulWrapper.append(liWrapper);
-      }
-
-      ROOT.innerHTML = "";
-      ROOT.append(ulWrapper);
-    })
-    .catch(error => console.error(error));
-};
-
-
-
-export const getSpecies = () => {
-  const ROOT = getRoot();
-
-  fetch("https://swapi.info/api/species")
-    .then(response => response.json())
-    .then(data => {
-      const ulWrapper = document.createElement("ul");
-      ulWrapper.className = "species";
-
-      for (const item of data.slice(0, 10)) {
-        const { name, classification, designation, skin_colors, hair_colors } = item;
-
-        const liWrapper = document.createElement("li");
-        liWrapper.innerHTML = `<b>${name}</b>`;
-
-        const ullist = document.createElement("ul");
-        ullist.innerHTML = `
-          <li>Classification: ${classification}</li>
-          <li>Designation: ${designation}</li>
-          <li>Skin colors: ${skin_colors}</li>
-          <li>Hair colors: ${hair_colors}</li>
+        const ulDetails = document.createElement('ul');
+        ulDetails.innerHTML = `
+          <li>Director: ${director}</li>
+          <li>Episode: ${episode_id}</li>
+          <li>Release: ${new Date(release_date).getFullYear()}</li>
         `;
 
-        liWrapper.append(ullist);
-        ulWrapper.append(liWrapper);
-      }
+        li.append(ulDetails);
+        ulWrapper.append(li);
+      });
 
-      ROOT.innerHTML = "";
+      clearRoot();
       ROOT.append(ulWrapper);
     })
-    .catch(error => console.error(error));
+    .catch(err => {
+      console.error(err);
+      ROOT.textContent = 'Failed to load films.';
+    });
 };
 
+/* PEOPLE */
 
+// CACHE FUNCTION
+export const getPeople = () => {
+  clearRoot();
+  ROOT.textContent = 'Loading people...';
+
+  const ensureFilmsCache = () => {
+  if (filmsCache) {
+    return Promise.resolve();
+  }
+
+  return fetchData(urls.films).then(data => {
+    filmsCache = new Map(data.map(f => [f.url, f.title]));
+  });
+};
+// FETCH PEOPLE DATA
+  ensureFilmsCache()
+    .then(() => fetchData(urls.people))
+    .then(data => {
+      const ulWrapper = document.createElement('ul');
+      ulWrapper.className = 'people';
+
+      data.slice(0, 10).forEach(({ name, gender, films }) => {
+        const li = document.createElement('li');
+        const nameEl = document.createElement('strong');
+        nameEl.textContent = name;
+
+        const ulDetails = document.createElement('ul');
+        const liGender = document.createElement('li');
+        liGender.textContent = `Gender: ${gender}`;
+
+        const liFilms = document.createElement('li');
+        liFilms.textContent = 'Films:';
+        const filmsList = document.createElement('ul');
+
+        films.forEach(filmUrl => {
+          const filmLi = document.createElement('li');
+          filmLi.textContent =
+            filmsCache.get(filmUrl) ?? 'Unknown film';
+          filmsList.append(filmLi);
+        });
+
+        liFilms.append(filmsList);
+        ulDetails.append(liGender, liFilms);
+        li.append(nameEl, ulDetails);
+        ulWrapper.append(li);
+      });
+
+      clearRoot();
+      ROOT.append(ulWrapper);
+    })
+    .catch(err => {
+      console.error(err);
+      ROOT.textContent = 'Failed to load people.';
+    });
+};
+
+/* PLANETS */
+export const getPlanets = () => {
+  clearRoot();
+  ROOT.textContent = 'Loading planets...';
+// FETCH PLANETS DATA
+  fetchData(urls.planets)
+    .then(data => {
+      const ulWrapper = document.createElement('ul');
+      ulWrapper.className = 'planets';
+
+      data.slice(0, 10).forEach(({ name, climate, terrain }) => {
+        const li = document.createElement('li');
+        const nameEl = document.createElement('strong');
+        nameEl.textContent = name;
+
+        const ulDetails = document.createElement('ul');
+        ulDetails.innerHTML = `
+          <li>Climate: ${climate}</li>
+          <li>Terrain: ${terrain}</li>
+        `;
+
+        li.append(nameEl, ulDetails);
+        ulWrapper.append(li);
+      });
+
+      clearRoot();
+      ROOT.append(ulWrapper);
+    })
+    .catch(err => {
+      console.error(err);
+      ROOT.textContent = 'Failed to load planets.';
+    });
+};
+
+/* SPECIES */
+let speciesCache = null;
+
+export const getSpecies = () => {
+  clearRoot();
+  ROOT.textContent = 'Loading species...';
+// FETCH SPECIES DATA
+  fetchData(urls.species)
+    .then(data => {
+      speciesCache = new Map(data.map(s => [s.url, s.name])); // cache for people if needed
+      const ulWrapper = document.createElement('ul');
+      ulWrapper.className = 'species';
+
+      data.slice(0, 10).forEach(({ name, classification, language }) => {
+        const li = document.createElement('li');
+        const nameEl = document.createElement('strong');
+        nameEl.textContent = name;
+
+        const ulDetails = document.createElement('ul');
+        ulDetails.innerHTML = `
+          <li>Classification: ${classification}</li>
+          <li>Language: ${language}</li>
+        `;
+
+        li.append(nameEl, ulDetails);
+        ulWrapper.append(li);
+      });
+
+      clearRoot();
+      ROOT.append(ulWrapper);
+    })
+    .catch(err => {
+      console.error(err);
+      ROOT.textContent = 'Failed to load species.';
+    });
+};
+
+/* VEHICLES */
 export const getVehicles = () => {
-  const ROOT = getRoot();
-
-  fetch('https://swapi.info/api/vehicles')
-    .then(response => response.json())
+  clearRoot();
+  ROOT.textContent = 'Loading vehicles...';
+// FETCH VEHICLES DATA
+  fetchData(urls.vehicles)
     .then(data => {
       const ulWrapper = document.createElement('ul');
       ulWrapper.className = 'vehicles';
 
-      for (const item of data) {
-        const { name, model, manufacturer, vehicle_class, crew, cargo_capacity, films } = item;
+      data.slice(0, 10).forEach(({ name, model, manufacturer, crew }) => {
+        const li = document.createElement('li');
+        const nameEl = document.createElement('strong');
+        nameEl.textContent = name;
 
-        const liWrapper = document.createElement('li');
-        liWrapper.className = 'vehicle';
-
-        const h2 = document.createElement('h2');
-        h2.className = 'vehicleName';
-        h2.innerText = name;
-
-        const ulInner = document.createElement('ul');
-        ulInner.className = 'vehicleDetails';
-
-        const liModel = document.createElement('li');
-        liModel.className = 'vehicleDetail';
-        liModel.innerText = `Model: ${model}`;
-
-        const liManu = document.createElement('li');
-        liManu.className = 'vehicleDetail';
-        liManu.innerText = `Producent: ${manufacturer}`;
-
-        const liVehicles = document.createElement('li');
-        liVehicles.className = 'vehicleDetail';
-
-        const label = document.createElement('span');
-        label.className = 'label';
-        label.innerText = 'Fartøjsklasse:';
-        const value = document.createElement('span');
-        value.className = 'value';
-        value.innerText = `${vehicle_class}`;
-
-        liVehicles.append(label, value);
-
-        const liCrew = document.createElement('li');
-        liCrew.className = 'vehicleDetail';
-        liCrew.innerText = `Antal besætning: ${crew}`;
-
-        const liCargo = document.createElement('li');
-        liCargo.className = 'vehicleDetail';
-        liCargo.innerText = `Kapacitet: ${cargo_capacity}`;
-
-        const liFilms = document.createElement('li');
-        liFilms.className = 'vehicleDetail';
-        liFilms.innerText = `Film: ${films}`;
-
-        ulInner.append(liModel, liManu, label, value, liCrew, liCargo, liFilms);
-
-        liWrapper.append(h2, ulInner);
-        ulWrapper.append(liWrapper);
-      }
-
-      ROOT.innerHTML = '';
-      ROOT.append(ulWrapper);
-    })
-    .catch(error => console.error(error));
-};
-
-
-
-
-export const getStarships = () => {
-  const ROOT = getRoot();
-
-  fetch("https://swapi.info/api/starships")
-    .then(response => response.json())
-    .then(data => {
-      const ulWrapper = document.createElement("ul");
-      ulWrapper.className = "starships";
-
-      for (const item of data) {
-        const { name, model, manufacturer, crew } = item;
-
-        const li = document.createElement("li");
-        li.innerHTML = `
-          <b>${name}</b>
-          <ul>
-            <li>Model: ${model}</li>
-            <li>Manufacturer: ${manufacturer}</li>
-            <li>Crew: ${crew}</li>
-          </ul>
+        const ulDetails = document.createElement('ul');
+        ulDetails.innerHTML = `
+          <li>Model: ${model}</li>
+          <li>Manufacturer: ${manufacturer}</li>
+          <li>Crew: ${crew}</li>
         `;
 
+        li.append(nameEl, ulDetails);
         ulWrapper.append(li);
-      }
+      });
 
-      ROOT.innerHTML = "";
+      clearRoot();
       ROOT.append(ulWrapper);
     })
-    .catch(error => console.error(error));
+    .catch(err => {
+      console.error(err);
+      ROOT.textContent = 'Failed to load vehicles.';
+    });
+};
+
+/* STARSHIPS */
+export const getStarships = () => {
+  clearRoot();
+  ROOT.textContent = 'Loading starships...';
+// FETCH STARSHIPS DATA
+  fetchData(urls.starships)
+    .then(data => {
+      const ulWrapper = document.createElement('ul');
+      ulWrapper.className = 'starships';
+
+      data.slice(0, 10).forEach(({ name, model, manufacturer, crew }) => {
+        const li = document.createElement('li');
+        const nameEl = document.createElement('strong');
+        nameEl.textContent = name;
+
+        const ulDetails = document.createElement('ul');
+        ulDetails.innerHTML = `
+          <li>Model: ${model}</li>
+          <li>Manufacturer: ${manufacturer}</li>
+          <li>Crew: ${crew}</li>
+        `;
+
+        li.append(nameEl, ulDetails);
+        ulWrapper.append(li);
+      });
+
+      clearRoot();
+      ROOT.append(ulWrapper);
+    })
+    .catch(err => {
+      console.error(err);
+      ROOT.textContent = 'Failed to load starships.';
+    });
 };
