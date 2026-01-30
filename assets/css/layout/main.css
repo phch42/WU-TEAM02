@@ -1,7 +1,5 @@
-main {
-  max-width: 1440px;
+#root {
   margin: 0 auto;
-  padding: 0 40px;
+  padding: 40px 80px;
   background: var(--blc);
 }
-
