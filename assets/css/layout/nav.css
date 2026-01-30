@@ -1,0 +1,24 @@
+
+nav {
+  background: var(--blc);
+  width: 100%;
+}
+nav > ul {
+    padding: 0 2rem;
+      width: auto;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin: 0 auto;
+      font-size: 1vh;
+}
+#navbar > ul > li {
+  list-style: none;
+  color: var(--wht);
+}
+
+#navbar a {
+  color: var(--ylw);
+  font-weight: 600;
+  letter-spacing: 1px;
+}

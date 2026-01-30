@@ -7,7 +7,7 @@ const doNavBar = () => {
          { text: 'Planeter', script: getPlanets },
          { text: 'Species', script: getSpecies },
           { text: 'Vehicles', script: getVehicles },
-           { text: 'starships', script: getStarships },
+           { text: 'Starships', script: getStarships },
 
 
     ]
